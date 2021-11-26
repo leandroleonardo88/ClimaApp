@@ -49,7 +49,7 @@ const Details = ({ navigation, route }) => {
             <View>
             <MapView style={styles.map}
             initialRegion={{
-                latitude: latitudNumero+Number(latitud),
+                latitude: latitudNumero,
                 longitude: longitudNumero,
                 latitudeDelta: 20,
                 longitudeDelta: 20,

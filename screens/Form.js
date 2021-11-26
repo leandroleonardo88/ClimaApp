@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
@@ -26,36 +26,76 @@ const Form = ({ navigation}) => {
 
     const handleSubmit = async (values) => {
         setError("")
-        try {
-            let datosFormulario = []
-            const value = await AsyncStorage.getItem('datosFormulario')
-            if (value) {
-                datosFormulario = JSON.parse(value)
-                if (false) {
-                    //return setError('Los datos ingresados estan duplicados.')
+
+        pais = values.pais;
+        ciudad = values.ciudad;
+        const appId = 'f3e0019459448698b2d30f3b5e803701';
+        const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
+        
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        console.log('verificacion de pais',resultado);
+        
+        if(resultado.cod === "404"){   
+            
+            mostrarAlertaNoHayResultado();
+
+        } else {
+
+            try {
+                let datosFormulario = []
+                const value = await AsyncStorage.getItem('datosFormulario')
+                if (value) {
+                    datosFormulario = JSON.parse(value)
+                    if (datosFormulario.find((datosFormulario) => datosFormulario.ciudad.trim().toUpperCase() === values.ciudad.trim().toUpperCase()))
+                    {
+                        console.log('datos duplicados')
+                        mostrarAlertaDuplicado();
+                        return;
+                        
+                    } else {
+                        const id = shortid.generate()
+                        values.id = id
+                        datosFormulario.push(values)
+                        const json_value = JSON.stringify(datosFormulario)
+                        await AsyncStorage.setItem('datosFormulario', json_value)
+                        console.log('datosFormulario 1', json_value)
+                    }
                 } else {
                     const id = shortid.generate()
                     values.id = id
                     datosFormulario.push(values)
                     const json_value = JSON.stringify(datosFormulario)
                     await AsyncStorage.setItem('datosFormulario', json_value)
-                    console.log('datosFormulario 1', json_value)
+                    console.log('datosFormulario 2', json_value)
                 }
-            } else {
-                const id = shortid.generate()
-                values.id = id
-                datosFormulario.push(values)
-                const json_value = JSON.stringify(datosFormulario)
-                await AsyncStorage.setItem('datosFormulario', json_value)
-                console.log('datosFormulario 2', json_value)
+            } catch (error) {
+                AsyncStorage.removeItem('datosFormulario');
+                console.log(error)
             }
-        } catch (error) {
-            AsyncStorage.removeItem('datosFormulario');
-            console.log(error)
+            
         }
+
     }
 
-    
+    //Alerta por si se ingresa una ciudad ya existente
+    const mostrarAlertaDuplicado = () => {
+        Alert.alert(
+          'Cuidado',
+          'Esta ciudad ya ha sido ingresada, intenta con una otra',
+          [{ text: 'Entendido'}]
+        )
+      }
+
+      //Alerta por si se ingresa una ciudad ya existente
+    const mostrarAlertaNoHayResultado = () => {
+        Alert.alert(
+          'Cuidado',
+          'No hay resultados para esta ciudad, intenta con otra',
+          [{ text: 'Entendido'}]
+        )
+      }
+
 
     return (
         <View style={styles.container}>
