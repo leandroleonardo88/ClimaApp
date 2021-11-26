@@ -36,28 +36,29 @@ const Details = ({ navigation, route }) => {
     //     const temperatura = data.main.temp
     // }
     
-
+    const latitudNumero = Number(latitud);
+    const longitudNumero = Number(longitud);
 
     return (
         <View style={styles.container}>
             <Text>Details Screen</Text>
             <Text> {temperatura} </Text>
-            <Text> {latitud} </Text>
-            <Text> {longitud} </Text>
+            <Text> {latitud} {Number(latitud)} {latitudNumero}</Text>
+            <Text> {longitud} {Number(longitud)}</Text>
 
-            <View style={styles.container}>
+            <View>
             <MapView style={styles.map}
             initialRegion={{
-                latitude: -34.6132,
-                longitude: -58.3772,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitude: latitudNumero+Number(latitud),
+                longitude: longitudNumero,
+                latitudeDelta: 20,
+                longitudeDelta: 20,
             }} 
             >
                 <Marker
                     coordinate={{
-                        latitude: -34.6132,
-                        longitude: -58.3772
+                        latitude: Number(latitud),
+                        longitude: Number(longitud)
                     }}
                 
                 />

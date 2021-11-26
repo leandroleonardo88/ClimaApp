@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 import * as Yup from 'yup'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import shortid from 'shortid';
 
 const formularioScheme = Yup.object().shape({
     ciudad: Yup.string()
@@ -17,7 +18,9 @@ const formularioScheme = Yup.object().shape({
 
 });
 
-const Form = ({ navigation }) => {
+var i = 1;
+
+const Form = ({ navigation}) => {
     const [error, setError] = useState('')
     const [guardarStorage, setGuardarStorage] = useState([])
 
@@ -31,14 +34,20 @@ const Form = ({ navigation }) => {
                 if (false) {
                     //return setError('Los datos ingresados estan duplicados.')
                 } else {
+                    const id = shortid.generate()
+                    values.id = id
                     datosFormulario.push(values)
                     const json_value = JSON.stringify(datosFormulario)
                     await AsyncStorage.setItem('datosFormulario', json_value)
+                    console.log('datosFormulario 1', json_value)
                 }
             } else {
+                const id = shortid.generate()
+                values.id = id
                 datosFormulario.push(values)
                 const json_value = JSON.stringify(datosFormulario)
                 await AsyncStorage.setItem('datosFormulario', json_value)
+                console.log('datosFormulario 2', json_value)
             }
         } catch (error) {
             AsyncStorage.removeItem('datosFormulario');
@@ -46,16 +55,18 @@ const Form = ({ navigation }) => {
         }
     }
 
+    
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => navigation.navigate('Home', i=i+1)}
                 style={styles.goBackIcon}
             >
                 <MaterialCommunityIcons name="arrow-left" color={"black"} size={26}></MaterialCommunityIcons>
             </TouchableOpacity>
             <Formik
-                initialValues={{ pais: '', ciudad: '' }}
+                initialValues={{ pais: '', ciudad: '', id: '' }}
                 validationSchema={formularioScheme}
                 onSubmit={handleSubmit}>
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
