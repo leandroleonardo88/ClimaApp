@@ -11,7 +11,7 @@ const formularioScheme = Yup.object().shape({
     ciudad: Yup.string()
         .min(3, 'Minino 3 caracteres')
         .max(30, 'Maximo de caracteres superado')
-        .trim('No debe contener espacion al inicio y final')
+        .trim('No debe contener espacio al inicio y final')
         .required('Campo obligatorio'),
     pais: Yup.string()
         .required('Campo obligatorio')
@@ -100,7 +100,7 @@ const Form = ({ navigation}) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Home', i=i+1)}
+                onPress={() => navigation.navigate('Home', i=i++)}
                 style={styles.goBackIcon}
             >
                 <MaterialCommunityIcons name="arrow-left" color={"black"} size={26}></MaterialCommunityIcons>

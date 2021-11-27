@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Details = ({ navigation, route }) => {
     //console.log(route.params)
@@ -15,8 +15,10 @@ const Details = ({ navigation, route }) => {
     console.log(url);
     
     const [temperatura, setTemperatura] = useState('')
-    const [latitud, setLatitud] = useState('')
-    const [longitud, setLongitud] = useState('')
+    const [latitud, setLatitud] = useState(0)
+    const [longitud, setLongitud] = useState(0)
+    const [view, setView] = useState(false)
+
     fetch(url, {
         method: 'GET'
     })
@@ -43,27 +45,57 @@ const Details = ({ navigation, route }) => {
         <View style={styles.container}>
             <Text>Details Screen</Text>
             <Text> {temperatura} </Text>
-            <Text> {latitud} {Number(latitud)} {latitudNumero}</Text>
-            <Text> {longitud} {Number(longitud)}</Text>
-
-            <View>
-            <MapView style={styles.map}
-            initialRegion={{
-                latitude: latitudNumero,
-                longitude: longitudNumero,
-                latitudeDelta: 20,
-                longitudeDelta: 20,
-            }} 
+            <Text> {latitud} </Text>
+            <Text> {longitud} </Text>
+            <TouchableOpacity
+                style={styles.btn}
+                onPress={() => navigation.goBack()}
             >
-                <Marker
-                    coordinate={{
-                        latitude: Number(latitud),
-                        longitude: Number(longitud)
-                    }}
-                
-                />
-            </MapView>
-            </View>   
+                <Text style={styles.btnText}>Go back</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={styles.btn}
+                onPress={() => { setView(true) }}
+            >
+                <Text style={styles.btnText}>Modal</Text>
+            </TouchableOpacity>
+
+            <Modal
+                animationType="fade"
+                onDismiss={() => console.log(`close`)}
+                onShow={() => { latitud, longitud }}
+                transparent
+                visible={view}
+            >
+                <View style={{ flex: 1, backgroundColor: 'rgba(1,1,1,0.5)', justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ height: '70%', width: 350, backgroundColor: "#fff" }}>
+                        <View style={{ height: 45, width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "flex-start" }}>
+                            <TouchableOpacity style={styles.btn} onPress={() => { setView(false) }}>
+                                <MaterialCommunityIcons name="arrow-left" color={"black"} size={26}></MaterialCommunityIcons>
+                            </TouchableOpacity>
+                            <View>
+                                <MapView style={styles.map}
+                                    initialRegion={{
+                                        latitude: latitud,
+                                        longitude: longitud,
+                                        latitudeDelta: 0.0922,
+                                        longitudeDelta: 0.0421,
+                                    }}
+                                >
+                                    <Marker
+                                        coordinate={{
+                                            latitude: latitud,
+                                            longitude: longitud
+                                        }}
+
+                                    />
+                                </MapView>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
 
 
             <TouchableOpacity
