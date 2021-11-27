@@ -6,6 +6,7 @@ import DescriptionApp from '../screens/DescriptionApp'
 import Home from '../screens/Home'
 import Details from '../screens/Details'
 import Form from '../screens/Form'
+import About from '../screens/About'
 
 const Stack = createNativeStackNavigator()
 
@@ -32,6 +33,10 @@ const MainStack = () => {
                 <Stack.Screen
                     name='Form'
                     component={Form}
+                />
+                <Stack.Screen
+                    name='About'
+                    component={About}
                 />
             </Stack.Navigator>
         </NavigationContainer>

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Modal, Animated } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import { LinearGradient } from "expo-linear-gradient";
+
+// <AnimatedLinearGradient
+//     colors={["rgba(255,255,255, 0)", "rgba(255,255,255, 1)"]}
+//     style={{ your styles go here }}/>
+
+//const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 const Details = ({ navigation, route }) => {
     //console.log(route.params)
@@ -10,6 +17,7 @@ const Details = ({ navigation, route }) => {
     console.log(ciudad)
     console.log(pais)
 
+    //llamar a la API
     const appId = 'f3e0019459448698b2d30f3b5e803701';
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
     console.log(url);
@@ -47,12 +55,6 @@ const Details = ({ navigation, route }) => {
             <Text> {temperatura} </Text>
             <Text> {latitud} </Text>
             <Text> {longitud} </Text>
-            <TouchableOpacity
-                style={styles.btn}
-                onPress={() => navigation.goBack()}
-            >
-                <Text style={styles.btnText}>Go back</Text>
-            </TouchableOpacity>
 
             <TouchableOpacity
                 style={styles.btn}
@@ -127,5 +129,10 @@ const styles = StyleSheet.create({
     map: {
         width: 300,
         height: 300,
+        marginTop: '150%'
       }, 
+      fondo: {
+          marginHorizontal: '100%',
+          marginVertical: '100%',
+      }
 })

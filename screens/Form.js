@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import shortid from 'shortid';
 
+
 const formularioScheme = Yup.object().shape({
     ciudad: Yup.string()
         .min(3, 'Minino 3 caracteres')
@@ -27,6 +28,7 @@ const Form = ({ navigation}) => {
     const handleSubmit = async (values) => {
         setError("")
 
+        //llamar a la API
         pais = values.pais;
         ciudad = values.ciudad;
         const appId = 'f3e0019459448698b2d30f3b5e803701';
@@ -153,10 +155,21 @@ const Form = ({ navigation}) => {
                 )}
             </Formik>
         </View>
+        
     )
 }
+const ocultarTeclado = () => {
+    Keyboard.dismiss();
 
-export default Form
+return (
+    <>
+    <TouchableWithoutFeedback onPress={ () => ocultarTeclado}></TouchableWithoutFeedback>
+    </>
+);
+};
+
+export default Form;
+
 
 const styles = StyleSheet.create({
     container: {

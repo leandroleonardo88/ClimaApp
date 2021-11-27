@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const Home = ({ navigation, route }) => {
 
     console.log(route.params)
@@ -13,7 +14,7 @@ const Home = ({ navigation, route }) => {
     useEffect(() => {
         getData()
     }, [contador])
-
+//guadar datos en memoria
     const getData = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('datosFormulario')
@@ -41,6 +42,7 @@ const Home = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
+            
             <FlatList
                 data={datosStorage}
                 keyExtractor={item => item.id}
@@ -60,6 +62,9 @@ const Home = ({ navigation, route }) => {
             <Text>Home Screen</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Form')}>
                 <Text>Agregar Ciudad</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('About')}>
+                <Text>Acerca de Nosotros</Text>
             </TouchableOpacity>
         </View>
     )
